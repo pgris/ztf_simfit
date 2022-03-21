@@ -19,5 +19,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'ztf_pipeutils>=0.1',
+        'sncosmo>=1.3.1',
+        'simsurvey >=0.1'
     ],
 )

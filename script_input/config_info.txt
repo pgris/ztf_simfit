@@ -1,7 +1,7 @@
 
 ## input
-csvInfo ztf_stage/csv/info.csv str #csv file def
-csvSelect ztf_stage/csv/selection.csv str #csv selec def
+csvInfo csv/info.csv str #csv file def
+csvSelect csv/selection.csv str #csv selec def
 metaFile Meta.hdf5 str #meta file name to process
 metaDir dataLC str #meta dir
 
