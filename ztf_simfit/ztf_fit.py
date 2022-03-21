@@ -1,4 +1,4 @@
-from ztf_hdf5 import Read_LightCurve
+from ztf_pipeutils.ztf_pipeutils.ztf_hdf5 import Read_LightCurve
 import sncosmo
 from astropy.table import Table, vstack, hstack
 import numpy as np
