@@ -18,6 +18,6 @@ setup(
     python_requires='>=3.5',
     zip_safe=False,
     install_requires=[
-        'ztf_pipeutil>=0.1',
+        'ztf_pipeutils>=0.1',
     ],
 )
