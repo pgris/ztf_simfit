@@ -1,0 +1,11 @@
+
+## input
+metaFileInput Meta_info.hdf5 str #meta file name to process
+metaDirInput dataLC str #meta dir
+
+## output
+metaFileOutput Meta_fit.hdf5 str #meta file name for output
+metaDirOutput dataLC str #meta dir for output
+
+## processing parameters
+ nprocFit 1 int #number of procs for multiprocessing

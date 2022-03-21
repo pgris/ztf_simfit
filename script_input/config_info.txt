@@ -1,0 +1,13 @@
+
+## input
+csvInfo ztf_stage/csv/info.csv str #csv file def
+csvSelect ztf_stage/csv/selection.csv str #csv selec def
+metaFile Meta.hdf5 str #meta file name to process
+metaDir dataLC str #meta dir
+
+## SNR cut for LC points
+snr 5.0 float #SNR sel for info estimation
+
+## output
+infoFile Meta_info.hdf5 str #info file name result
+outputDirInfo dataLC str #outputdir
