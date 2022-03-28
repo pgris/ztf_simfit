@@ -1,6 +1,6 @@
 import operator
 from astropy.table import Table, hstack, vstack
-from ztf_pipeutils.ztf_pipeutils.ztf_hdf5 import Read_LightCurve
+from ztf_pipeutils.ztf_hdf5 import Read_LightCurve
 
 
 def get_info(data, info, name_info='name', col_info='col', thresh_info='thresh', type_info='type', op_info='op'):

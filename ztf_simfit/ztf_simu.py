@@ -1,4 +1,4 @@
-import simsurvey_tools as sst
+import ztf_pipeutils.simsurvey_tools as sst
 import pandas as pd
 import simsurvey
 import os
