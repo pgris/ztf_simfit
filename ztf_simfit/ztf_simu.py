@@ -7,13 +7,15 @@ import os
 class Simul_lc:
     "Definition of a class that simule light curve"
 
-    def __init__(self, folder_dir, sfd98File, rcidFile, csvFile, ztf_fields, z_range=(0.01, 0.1), dec_range=(-30, 90), n_det=1,
+    def __init__(self, ztfdataDir, logDir, dustmapDir, rcidFile, csvFile, ztf_fields, z_range=(0.01, 0.1), dec_range=(-30, 90), n_det=1,
                  ntransient=11, seed=70, threshold=1, **kwargs):
         """
         Parameters
         ----------
-        folder_dir : str
-            Name of the folder directory to find sfd98 file.
+        ztfdataDir : str
+            directory with ztf data
+        logDir:
+           wdir with cadence logs
         z_range : (int,int)
             redshift range (default=(0.01, 0.1)).
         dec_range : (int,int)
@@ -28,16 +30,24 @@ class Simul_lc:
             S/N requirement for detection (default=1).
         """
 
-        self.sfd98_dir = os.path.join(folder_dir, sfd98File)
-        self.rcid_dir = os.path.join(folder_dir, rcidFile)
-        self.csv_dir = os.path.join(folder_dir, csvFile)
-        self.ztf_fields_dir = os.path.join(folder_dir, ztf_fields)
+        self.dustmapDir = dustmapDir
+        # grab dustmaps if necessary
+        if not os.path.isdir(self.dustmapDir):
+            os.makedirs(self.dustmapDir)
+            self.dustmaps()
 
-        self.fields = sst.load_ztf_fields(filename=self.ztf_fields_dir)
+        self.dustmapDir += '/sfd'
+
+        rcids = os.path.join(ztfdataDir, rcidFile)
+        logObs = os.path.join(logDir, csvFile)
+        ztf_fields = os.path.join(ztfdataDir, ztf_fields)
+
+        self.fields = sst.load_ztf_fields(filename=ztf_fields)
         self.ccds = sst.load_ztf_ccds(
-            filename=self.rcid_dir, num_segs=64)  # it's rcid
+            filename=rcids, num_segs=64)  # it's rcid
 
-        self.obs = pd.read_csv(self.csv_dir)
+        self.obs = pd.read_csv(logObs)
+
         self.simul = self.simul_lc(
             z_range, dec_range, ntransient, seed, n_det, threshold, **kwargs)
 
@@ -80,9 +90,20 @@ class Simul_lc:
             'stretch_sigma')
 
         tr = simsurvey.get_transient_generator(zrange=z_range, transient='Ia', template='salt2',
-                                               dec_range=dec_range, mjd_range=mjd_range, sfd98_dir=self.sfd98_dir,
+                                               dec_range=dec_range, mjd_range=mjd_range, sfd98_dir=self.dustmapDir,
                                                ntransient=ntransient, seed=seed, transientprop=transientprop)
 
         survey = simsurvey.SimulSurvey(
             generator=tr, plan=plan, n_det=n_det, threshold=threshold)
         return survey
+
+    def dustmaps(self):
+        """
+        method to grab dustmaps
+        Dust maps will be placed in self.dustmapDir/sfd
+
+        """
+        from dustmaps.config import config
+        config['data_dir'] = self.dustmapDir
+        import dustmaps.sfd
+        dustmaps.sfd.fetch()
