@@ -14,7 +14,7 @@ setup(
     author='M. Bailleul, Ph. Gris',
     author_email='manon.bailleul@etu.uca.fr,philippe.gris@clermont.in2p3.fr',
     license='BSD',
-    packages=['ztf_simfit'],
+    packages=['ztf_simfit', 'ztf_simfit_input', 'ztf_data'],
     python_requires='>=3.5',
     zip_safe=False,
     install_requires=[
