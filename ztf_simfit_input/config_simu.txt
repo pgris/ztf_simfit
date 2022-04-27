@@ -1,12 +1,12 @@
 ## required directories
 ztfdataDir default str #folder directory with ztf data
 outputDirSimu dataLC str #output directory for simulation
-logDir cadence_logs str #dir with cadence logs
+obsDir cadence_logs str #dir with cadence logs
 dustmapDir dustmaps str #dir with dust maps
 
 ## required file names
 rcidFile ZTF_corners_rcid.txt str #rcid file name 
-csvFile 2018_all_logs_from_dr1_rcid_zp_from_masci.csv str #csv file name for observation
+obsFile 2018_all_logs_from_dr1_rcid_zp_from_masci.csv str #csv file name for observation
 ztf_fields ZTF_Fields.txt str #ztf field file name for observation
 lcName Data.hdf5 str #Data file name
 metaName Meta.hdf5 str #Meta data file name 

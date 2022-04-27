@@ -10,7 +10,7 @@ rcidFile ZTF_corners_rcid.txt str #rcid file name
 obsFile data_36.0_72.0.hdf5 str #file name for observation
 cadFile cadence_36.0_72.0.hdf5 str #cadence file name
 ztf_fields ZTF_Fields.txt str #ztf field file name for observation
-lcName Data.hdf5 str #Data file name
+lcName LC.hdf5 str #Data file name
 metaName Meta.hdf5 str #Meta data file name 
 path_prefix SN str #path prefix for hdf5
 
