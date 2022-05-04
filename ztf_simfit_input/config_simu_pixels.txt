@@ -30,3 +30,4 @@ stretch_sigma 0.0 float #sigma stretch value
 nprocSimu 1 int #number of procs for multiprocessing
 runtype all str #type of run for data saving(indiv/all)
 pixelList all str #list of pixels to process
+npixels -1 int #number of pixels to process
