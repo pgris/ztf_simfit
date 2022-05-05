@@ -104,7 +104,6 @@ class Z_bins:
             z_moy.append(np.mean(md['z']))
             z_RMS.append(np.std(md['z']))
             c_moy.append(np.mean(md['c_err']))
-            #c_RMS.append(np.std(md['c_err']))
             c_RMS.append(1/(np.sqrt(np.sum(1/md['c_err']**2))))
             
 
@@ -120,7 +119,6 @@ class Z_bins:
     def plot_interpolation1d(self, axhline=False, error_bar=False, fill=False, add_text=False, add_column=False):
         
         z_moy, z_RMS, c_moy, c_RMS = self.moy_z_bin()
-        print(c_RMS)
         sup_list, inf_list = [], []
         for i in range(0, len(z_moy)):
             sup_list.append(c_moy[i] + c_RMS[i])
@@ -132,12 +130,12 @@ class Z_bins:
         
         #plt.plot(z_moy, c_moy, 'o', y_new, x_new, '-', color='orange')
         plt.plot(z_moy, c_moy, 'o', color='orange')
+        plt.xlabel('$z$', fontsize=13)
+        plt.ylabel('$\sigma_{c}$', fontsize=13)
 
         if add_text:
-            plt.text(0.06, 0.05, 'z_limit = {} +- {}'.format(np.round(z_comp, 2), np.round(z_comp-z_comp_sup, 2)), bbox=dict(boxstyle="round",
-                                                                                                                                 ec=(1., 0.5, 0.5),
-                                                                                                                                 fc=(1., 0.8, 0.8),))
-            plt.text(0.02, 0.042, r'$\sigma_{c}=0.04$', color='red')
+            plt.text(0.06, 0.05, r'$z_{completeness}$ ='+'{}'.format(np.round(z_comp, 3)) + r'$\pm$' + '{}'.format(np.round(z_comp-z_comp_sup, 3)))
+            plt.text(0.015, 0.042, r'$\sigma_{c}=0.04$', color='red')
         if axhline:
             plt.axhline(y=0.04, color='red', linestyle='-')
             plt.axvline(x=z_comp, color='red', linestyle='-')
