@@ -1,4 +1,4 @@
-from ztf_pipeutils.ztf_pipeutils.ztf_hdf5 import Read_LightCurve
+from ztf_pipeutils.ztf_hdf5 import Read_LightCurve
 import statistics as stat
 import matplotlib.pylab as plt
 import numpy as np
@@ -105,42 +105,43 @@ class Z_bins:
             z_RMS.append(np.std(md['z']))
             c_moy.append(np.mean(md['c_err']))
             c_RMS.append(1/(np.sqrt(np.sum(1/md['c_err']**2))))
-            
 
         return z_moy, z_RMS, c_moy, c_RMS
 
     def interpolate1d(self, x, y):
-        f = interpolate.interp1d(x, y)
+        f = interpolate.interp1d(x, y, bounds_error=False, fill_value=0.)
         x_new = x
         y_new = f(x_new)
         z_comp = f(0.04)
         return x_new, y_new, z_comp
 
     def plot_interpolation1d(self, axhline=False, error_bar=False, fill=False, add_text=False, add_column=False):
-        
+
         z_moy, z_RMS, c_moy, c_RMS = self.moy_z_bin()
         sup_list, inf_list = [], []
         for i in range(0, len(z_moy)):
             sup_list.append(c_moy[i] + c_RMS[i])
             inf_list.append(c_moy[i] - c_RMS[i])
-            
+
         x_new, y_new, z_comp = self.interpolate1d(c_moy, z_moy)
         x_sup, y_sup, z_comp_sup = self.interpolate1d(sup_list, z_moy)
         x_inf, y_inf, z_comp_inf = self.interpolate1d(inf_list, z_moy)
-        
+
         #plt.plot(z_moy, c_moy, 'o', y_new, x_new, '-', color='orange')
         plt.plot(z_moy, c_moy, 'o', color='orange')
         plt.xlabel('$z$', fontsize=13)
         plt.ylabel('$\sigma_{c}$', fontsize=13)
 
         if add_text:
-            plt.text(0.06, 0.05, r'$z_{completeness}$ ='+'{}'.format(np.round(z_comp, 3)) + r'$\pm$' + '{}'.format(np.round(z_comp-z_comp_sup, 3)))
+            plt.text(0.06, 0.05, r'$z_{completeness}$ ='+'{}'.format(
+                np.round(z_comp, 3)) + r'$\pm$' + '{}'.format(np.round(z_comp-z_comp_sup, 3)))
             plt.text(0.015, 0.042, r'$\sigma_{c}=0.04$', color='red')
         if axhline:
             plt.axhline(y=0.04, color='red', linestyle='-')
             plt.axvline(x=z_comp, color='red', linestyle='-')
         if fill:
-            plt.fill_between(z_moy, sup_list, inf_list, color='gold', alpha=0.3)
+            plt.fill_between(z_moy, sup_list, inf_list,
+                             color='gold', alpha=0.3)
         if error_bar:
             plt.errorbar(z_moy, c_moy, yerr=c_RMS,
                          fmt='none', capsize=2, elinewidth=1, color='red')
@@ -148,7 +149,7 @@ class Z_bins:
             return z_comp, z_comp_sup, z_comp_inf
 
     def plot_err_c_z(self, axhline=False, fontsize=15, error_bar=False, color='red'):
-        
+
         z_moy, z_RMS, c_moy, c_RMS = self.moy_z_bin()
         plt.scatter(z_moy, c_moy)
         plt.xlabel('$z$', fontsize=fontsize)
@@ -159,14 +160,15 @@ class Z_bins:
             plt.errorbar(z_moy, c_moy, yerr=c_RMS,
                          fmt='none', capsize=2, elinewidth=1, color=color)
 
-
     def add_data(self, metaDirOutput, metaFileOutput):
-        
-        cl = Read_LightCurve(file_name=self.metaFitInput, inputDir=self.inputDir)
+
+        cl = Read_LightCurve(file_name=self.metaFitInput,
+                             inputDir=self.inputDir)
         metadata = cl.get_table(path='meta')
         new_meta = metadata.copy()
 
-        z_comp, z_comp_sup, z_comp_inf = self.plot_interpolation1d(add_column=True)
+        z_comp, z_comp_sup, z_comp_inf = self.plot_interpolation1d(
+            add_column=True)
 
         new_meta['z_comp'] = z_comp
         new_meta['z_comp_sup'] = z_comp_sup
@@ -174,9 +176,7 @@ class Z_bins:
 
         if not os.path.exists(metaDirOutput):
             os.makedirs(metaDirOutput)
-            
+
         fOut = '{}/{}'.format(metaDirOutput, metaFileOutput)
-        astropy.io.misc.hdf5.write_table_hdf5(new_meta, fOut, path='meta', overwrite=True, serialize_meta=False)
-        
-        
-        
+        astropy.io.misc.hdf5.write_table_hdf5(
+            new_meta, fOut, path='meta', overwrite=True, serialize_meta=False)
