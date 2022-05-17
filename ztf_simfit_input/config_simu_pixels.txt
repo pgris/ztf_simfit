@@ -26,9 +26,11 @@ color_sigma 0.0 float #sigma color value
 stretch_mean 0.0 float #mean stretch value
 stretch_sigma 0.0 float #sigma stretch value
 season_length 100. float #minimal season length
+ebvofMW 0.25 float #max allowed E(B-V)
 
 ## computing parameters
 nprocSimu 1 int #number of procs for multiprocessing
 runtype all str #type of run for data saving(indiv/all)
 pixelList all str #list of pixels to process
 npixels -1 int #number of pixels to process
+split_output 0 int #to split output according to nproc
