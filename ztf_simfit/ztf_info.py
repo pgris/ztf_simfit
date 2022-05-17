@@ -121,7 +121,7 @@ class Info:
         # snr
         self.snr = snr
 
-    def __call__(self):
+    def __call__(self, bad_prefix='bad'):
         """
         Main method for processing
 
@@ -135,7 +135,7 @@ class Info:
         for meta in self.metadata:
             tt = Table(meta)
             path = meta['path']
-            if 'bad' not in path:
+            if bad_prefix not in path:
                 lc = self.read_lc.get_table(path)
                 lc = complete_lc(lc, self.snr)
                 res = get_info(lc, self.info_tab)
