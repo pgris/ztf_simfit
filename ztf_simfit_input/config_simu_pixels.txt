@@ -33,4 +33,4 @@ nprocSimu 1 int #number of procs for multiprocessing
 runtype all str #type of run for data saving(indiv/all)
 pixelList all str #list of pixels to process
 npixels -1 int #number of pixels to process
-split_output 0 int #to split output according to nproc
+backupFly 0 int #to save data as they are produced
