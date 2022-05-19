@@ -2,6 +2,7 @@ import ztf_pipeutils.simsurvey_tools as sst
 import pandas as pd
 import simsurvey
 import os
+import numpy as np
 
 
 class Simul_lc:
@@ -72,7 +73,7 @@ class Simul_lc:
                                self.ntransient, self.seed, self.n_det, self.threshold, **self.kwargs)
         try:
             lc = survey.get_lightcurves()
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, np.linalg.LinAlgError):
             lc = None
 
         return lc
