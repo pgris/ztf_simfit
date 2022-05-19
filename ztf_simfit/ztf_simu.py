@@ -70,8 +70,10 @@ class Simul_lc:
         #survey = self.simul
         survey = self.simul_lc(obs,  ra_range, dec_range, self.z_range,
                                self.ntransient, self.seed, self.n_det, self.threshold, **self.kwargs)
-
-        lc = survey.get_lightcurves()
+        try:
+            lc = survey.get_lightcurves()
+        except (TypeError, ValueError):
+            lc = None
 
         return lc
 
