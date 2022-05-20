@@ -34,3 +34,4 @@ runtype all str #type of run for data saving(indiv/all)
 pixelList all str #list of pixels to process
 npixels -1 int #number of pixels to process
 backupFly 0 int #to save data as they are produced
+npixelsBatch -1 int #number of pixels to process ber batch
