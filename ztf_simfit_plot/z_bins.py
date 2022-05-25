@@ -1,4 +1,4 @@
-from ztf_pipeutils.ztf_pipeutils.ztf_hdf5 import Read_LightCurve
+from ztf_pipeutils.ztf_hdf5 import Read_LightCurve
 import statistics as stat
 import numpy as np
 import operator
@@ -127,9 +127,9 @@ class Z_bins:
         x_inf, y_inf, z_comp_inf = self.interpolate1d(inf_list, z_moy)
 
         return z_comp, z_comp_sup, z_comp_inf
-    
+
     def plot_z_comp(self):
-        
+
         import matplotlib.pylab as plt
         z_moy, z_RMS, c_moy, c_RMS = self.moy_z_bin()
         z_comp, z_comp_sup, z_comp_inf = self.get_z()
@@ -137,26 +137,26 @@ class Z_bins:
         for i in range(0, len(z_moy)):
             sup_list.append(c_moy[i] + c_RMS[i])
             inf_list.append(c_moy[i] - c_RMS[i])
-        
-        plt.figure(figsize=(9,7))
+
+        plt.figure(figsize=(9, 7))
         #plt.plot(z_moy, c_moy, 'o', y_new, x_new, '-', color='orange')
         plt.plot(z_moy, c_moy, 'o', color='orange')
         plt.xlabel('$z$', fontsize=13)
         plt.ylabel('$\sigma_{c}$', fontsize=13)
 
         plt.text(0.06, 0.05, r'$z_{completeness}$ ='+'{}'.format(
-                np.round(z_comp, 3)) + r'$\pm$' + '{}'.format(np.round(z_comp-z_comp_sup, 3)))
+            np.round(z_comp, 3)) + r'$\pm$' + '{}'.format(np.round(z_comp-z_comp_sup, 3)))
         plt.text(0.015, 0.042, r'$\sigma_{c}=0.04$', color='red')
         plt.axhline(y=0.04, color='red', linestyle='-')
         plt.axvline(x=z_comp, color='red', linestyle='-')
         plt.fill_between(z_moy, sup_list, inf_list,
                          color='gold', alpha=0.3)
-        #plt.errorbar(z_moy, c_moy, yerr=c_RMS,
-                     #fmt='none', capsize=2, elinewidth=1, color='red')
+        # plt.errorbar(z_moy, c_moy, yerr=c_RMS,
+        # fmt='none', capsize=2, elinewidth=1, color='red')
         plt.show()
-        
+
     def plot_err_c_z(self, axhline=False, fontsize=15, error_bar=False, color='red'):
-        
+
         import matplotlib.pylab as plt
         z_moy, z_RMS, c_moy, c_RMS = self.moy_z_bin()
         plt.scatter(z_moy, c_moy)
