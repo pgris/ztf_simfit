@@ -70,7 +70,8 @@ class Simul_lc:
         """
         #survey = self.simul
         survey = self.simul_lc(obs,  ra_range, dec_range, self.z_range,
-                               self.ntransient, self.seed, self.n_det, self.threshold, **self.kwargs)
+                               self.ntransient, self.seed, self.n_det,
+                               self.threshold, **self.kwargs)
         try:
             lc = survey.get_lightcurves()
         except (TypeError, ValueError, np.linalg.LinAlgError):
@@ -78,13 +79,16 @@ class Simul_lc:
 
         return lc
 
-    def simul_lc(self, obs, ra_range, dec_range, z_range, ntransient, seed, n_det, threshold, **kwargs):
+    def simul_lc(self, obs, ra_range, dec_range, z_range, ntransient,
+                 seed, n_det, threshold, **kwargs):
 
         obs['field'] = obs['field'].astype('int64')
         #obs['time'] = obs['time'] - 2400000.5
 
-        plan = simsurvey.SurveyPlan(time=obs['time'], band=obs['band'], zp=obs['zp'], obs_field=obs['field'],
-                                    obs_ccd=obs['rcid'], skynoise=obs['skynoise'],
+        plan = simsurvey.SurveyPlan(time=obs['time'], band=obs['band'],
+                                    zp=obs['zp'], obs_field=obs['field'],
+                                    obs_ccd=obs['rcid'],
+                                    skynoise=obs['skynoise'],
                                     fields={k: v for k, v in self.fields.items(
                                     ) if k in ['ra', 'dec', 'field_id', 'width', 'height']},
                                     ccds=self.ccds)
@@ -103,10 +107,15 @@ class Simul_lc:
         transientprop['lcsimul_prop']['stretch_sigma'] = kwargs.pop(
             'stretch_sigma')
 
-        tr = simsurvey.get_transient_generator(zrange=z_range, transient='Ia', template='salt2',
+        tr = simsurvey.get_transient_generator(zrange=z_range, transient='Ia',
+                                               template='salt2',
                                                ra_range=ra_range,
-                                               dec_range=dec_range, mjd_range=mjd_range, sfd98_dir=self.dustmapDir,
-                                               ntransient=ntransient, seed=seed, transientprop=transientprop)
+                                               dec_range=dec_range,
+                                               mjd_range=mjd_range,
+                                               sfd98_dir=self.dustmapDir,
+                                               ntransient=ntransient,
+                                               seed=seed,
+                                               transientprop=transientprop)
 
         survey = simsurvey.SimulSurvey(
             generator=tr, plan=plan, n_det=n_det, threshold=threshold)
