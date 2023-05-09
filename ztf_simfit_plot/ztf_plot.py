@@ -4,7 +4,7 @@ import sncosmo
 
 
 class VisuLC:
-    def __init__(self, metaFileInput, metaDirInput):
+    def __init__(self, metaFileInput, metaDirInput, SNR=5):
 
         meta = Read_LightCurve(file_name=metaFileInput, inputDir=metaDirInput)
         metaTable = meta.get_table(path='meta')
@@ -15,7 +15,8 @@ class VisuLC:
         lcName = metadata['file_name']
 
         self.lcs = Read_LightCurve(file_name=lcName, inputDir=lcDir)
-
+        self.SNR = SNR
+        
         # print SNIDS
 
         print(metaTable['path'])
