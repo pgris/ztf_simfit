@@ -1,9 +1,10 @@
 import operator
 from astropy.table import Table, hstack, vstack
 from ztf_pipeutils.ztf_hdf5 import Read_LightCurve
+import numpy as np
 
 
-def get_info(data, info, name_info='name', col_info='col', thresh_info='thresh', type_info='type', op_info='op'):
+def get_info(data, info, name_info='name', col_info='col', col_sel='colsel', type_sel='typesel', thresh_info_a='thresha', op_info_a='opa', thresh_info_b='threshb', op_info_b='opb'):
     """"
     Function to estimate infos from data
 
@@ -29,15 +30,20 @@ def get_info(data, info, name_info='name', col_info='col', thresh_info='thresh',
     res = Table()
     for row in info:
 
-        col = row[col_info]
-        op = eval(row[op_info])
-        type_ = eval(row[type_info])
-        thresh = type_(row[thresh_info])
+        col = row[col_sel]
+        type_ = eval(row[type_sel])
+        opa = eval(row[op_info_a])
+        thresha = type_(row[thresh_info_a])
+        opb = eval(row[op_info_b])
+        threshb = type_(row[thresh_info_b])
+        maska = opa(data[col], thresha)
+        maskb = opb(data[col], threshb)
+        new_tab = data[maska & maskb]
 
-        mask = op(data[col], thresh)
-        new_tab = data[mask]
-
-        res[row[name_info]] = [len(new_tab)]
+        nn = len(new_tab[row[col_info]])
+        if 'epochs' in row[name_info]:
+            nn = len(np.unique(new_tab[row[col_info]]))
+        res[row[name_info]] = [nn]
 
     return res
 
@@ -132,12 +138,19 @@ class Info:
         """
         restab = Table()
         restab.meta = self.metadata.meta
+
         for meta in self.metadata:
             tt = Table(meta)
             path = meta['path']
+            print('alors path', path)
             if bad_prefix not in path:
                 lc = self.read_lc.get_table(path)
                 lc = complete_lc(lc, self.snr)
+                print(lc.columns)
+                lc['mjd_min'] = np.min(lc['time'])
+                lc['night'] = lc['time']-lc['mjd_min']+1
+                lc['night'] = lc['night'].astype(int)
+                lc.sort('night')
                 res = get_info(lc, self.info_tab)
                 tt = hstack([tt, res])
             else:
