@@ -41,7 +41,8 @@ def get_info(data, info, name_info='name', col_info='col', col_sel='colsel', typ
         new_tab = data[maska & maskb]
 
         nn = len(new_tab[row[col_info]])
-        if 'epochs' in row[name_info]:
+        ccol = row[name_info]
+        if 'epochs' in ccol or 'bands' in ccol:
             nn = len(np.unique(new_tab[row[col_info]]))
         res[row[name_info]] = [nn]
 
@@ -142,11 +143,9 @@ class Info:
         for meta in self.metadata:
             tt = Table(meta)
             path = meta['path']
-            print('alors path', path)
             if bad_prefix not in path:
                 lc = self.read_lc.get_table(path)
                 lc = complete_lc(lc, self.snr)
-                print(lc.columns)
                 lc['mjd_min'] = np.min(lc['time'])
                 lc['night'] = lc['time']-lc['mjd_min']+1
                 lc['night'] = lc['night'].astype(int)
