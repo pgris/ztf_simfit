@@ -6,7 +6,7 @@ metaFile Meta.hdf5 str #meta file name to process
 metaDir dataLC str #meta dir
 
 ## SNR cut for LC points
-snr 5.0 float #SNR sel for info estimation
+snr 1.0 float #SNR sel for info estimation
 
 ## output
 infoFile Meta_info.hdf5 str #info file name result
